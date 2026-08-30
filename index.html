@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="GrokFarm — twelve bots work 240 acres of corn. $GROKFARM on Solana, minted on pump.fun.">
+<meta name="description" content="GrokFarm — twelve bots work 240 acres of corn. $GROKFARM on Robinhood Chain. CA 0x74ebe311785d0e9cfb47e301b7fd697a0439c03e">
 <meta property="og:title" content="GrokFarm $GROKFARM">
 <meta property="og:description" content="Twelve bots. One row each. Corn is money.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@Sprytixl">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><text y=%2226%22 font-size=%2226%22>&#127805;</text></svg>">
 <style>html{background:#0a0806}body{margin:0}img{max-width:100%}</style>
 <title>GrokFarm $GROKFARM</title>
@@ -138,6 +139,27 @@ a{color:inherit;text-decoration:none}
 .goalhead{margin-top:56px;margin-bottom:12px;font-family:'Press Start 2P',monospace;font-size:8px;
   color:var(--gold);letter-spacing:.18em}
 .statrow.goals{margin-top:0}
+.lnk{color:var(--gold);border-bottom:1px solid rgba(232,185,60,.4)}
+.lnk:hover{color:var(--cream);border-color:var(--cream)}
+
+/* hero contract bar */
+.cabar{margin-top:44px;max-width:1000px;border:1px solid rgba(232,185,60,.45);background:#100c07;
+  padding:16px 18px;box-shadow:0 0 0 1px rgba(232,185,60,.07),0 20px 60px rgba(0,0,0,.5)}
+.cabar-k{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);letter-spacing:.16em}
+.cabar-row{display:flex;align-items:stretch;gap:10px;margin-top:12px;flex-wrap:wrap}
+.cabar-ca{flex:1;min-width:min(100%,250px);font-family:'VT323',monospace;font-size:clamp(15px,1.6vw,24px);
+  color:var(--cream);background:#070a05;border:1px solid var(--line-2);padding:11px 13px;
+  overflow-x:auto;white-space:nowrap;display:flex;align-items:center}
+.cabar-btn{font-family:'Press Start 2P',monospace;font-size:9px;padding:0 18px;border:0;cursor:pointer;
+  background:var(--gold);color:#150f04;display:flex;align-items:center;transition:filter .15s}
+.cabar-btn:hover{filter:brightness(1.12)}
+.cabar-btn:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.cabar-btn.ghost{background:transparent;color:var(--cream);border:1px solid var(--line-2)}
+.cabar-btn.ghost:hover{border-color:var(--gold);color:var(--gold);filter:none}
+.cabar-btn.done{background:var(--green);color:#04150a}
+.cabar-warn{margin-top:12px;font-family:'Press Start 2P',monospace;font-size:7px;color:var(--faint);letter-spacing:.1em}
+.fact b a{color:var(--gold)}
+.fact b a:hover{color:var(--cream)}
 
 /* floating hud chips */
 .chip{position:absolute;border:1px solid var(--line-2);background:rgba(16,12,8,.8);padding:10px 12px;z-index:3}
@@ -319,6 +341,8 @@ a{color:inherit;text-decoration:none}
 .cabox button{border:0;border-left:1px dashed var(--line-2);background:#12100a;color:var(--cream);
   font-family:'Press Start 2P',monospace;font-size:8px;padding:0 20px;cursor:pointer;letter-spacing:.1em}
 .cabox button:hover{background:var(--gold);color:#150f04}
+.cabox button.done{background:var(--green);color:#04150a}
+.note{max-width:60ch;margin:30px auto 0;font-size:15px;color:var(--faint);line-height:1.8}
 
 .foot{padding:52px 34px 76px;text-align:center;background:#050703;border-top:1px solid var(--line);position:relative;z-index:2}
 .foot .px{display:block;font-size:8px;color:var(--faint);letter-spacing:.14em;line-height:2.4;margin-bottom:20px}
@@ -400,7 +424,7 @@ a{color:inherit;text-decoration:none}
 <!-- ===================== HEADER ===================== -->
 <header class="hdr">
   <div class="progress"><i id="prog"></i></div>
-  <div class="tickbar"><span id="tick">CORN IS MONEY · TWELVE BOTS ONE HUMAN · <b>$GROKFARM LIVE ON SOLANA</b> · MINTED ON <u>PUMP.FUN</u> · MINT AUTHORITY <b>REVOKED</b> · VERIFY THE CA BEFORE EVERY BUY · 240 ACRES · THE COMBINE DOES NOT STOP · CORN IS MONEY · TWELVE BOTS ONE HUMAN · <b>$GROKFARM LIVE ON SOLANA</b> · MINTED ON <u>PUMP.FUN</u> · MINT AUTHORITY <b>REVOKED</b> · VERIFY THE CA BEFORE EVERY BUY · 240 ACRES · THE COMBINE DOES NOT STOP · </span></div>
+  <div class="tickbar"><span id="tick">CORN IS MONEY · TWELVE BOTS ONE HUMAN · <b>$GROKFARM LIVE ON ROBINHOOD CHAIN</b> · CA <u>0x74ebe311785d0e9cfb47e301b7fd697a0439c03e</u> · VERIFY THE CA BEFORE EVERY BUY · 240 ACRES · THE COMBINE DOES NOT STOP · CORN IS MONEY · TWELVE BOTS ONE HUMAN · <b>$GROKFARM LIVE ON ROBINHOOD CHAIN</b> · CA <u>0x74ebe311785d0e9cfb47e301b7fd697a0439c03e</u> · VERIFY THE CA BEFORE EVERY BUY · 240 ACRES · THE COMBINE DOES NOT STOP · </span></div>
   <nav class="nav">
     <a class="brand" href="#top"><span class="mark"></span>GROKFARM</a>
     <div class="navlinks">
@@ -411,7 +435,7 @@ a{color:inherit;text-decoration:none}
       <a href="#seasons">SEASONS</a>
       <a href="#terminal">TERMINAL</a>
     </div>
-    <a class="navbuy" href="https://pump.fun" target="_blank" rel="noopener noreferrer">BUY $GROKFARM</a>
+    <a class="navbuy" href="#buy">GET $GROKFARM</a>
   </nav>
 </header>
 
@@ -423,7 +447,7 @@ a{color:inherit;text-decoration:none}
       <div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </div>
     <div class="chip c2">
-      <div class="k">NETWORK</div><div class="v">SOLANA · PUMP.FUN</div>
+      <div class="k">NETWORK</div><div class="v">ROBINHOOD CHAIN</div>
       <div class="bars"><i></i><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i></div>
     </div>
     <div class="chip c3">
@@ -432,7 +456,7 @@ a{color:inherit;text-decoration:none}
     </div>
     <canvas id="mascot" width="72" height="96" aria-hidden="true"></canvas>
 
-    <div class="kicker"><span class="dot"></span>SOLANA · PUMP.FUN · $GROKFARM</div>
+    <div class="kicker"><span class="dot"></span>ROBINHOOD CHAIN · ARBITRUM L2 · $GROKFARM</div>
     <h1 class="h1">GROKFARM</h1>
     <div class="h2out">CORN IS MONEY</div>
     <p class="herotext">Nobody wrote a thread about agents. Twelve bots got put in a corn field and told to
@@ -440,8 +464,18 @@ a{color:inherit;text-decoration:none}
       contract at the end of the day. The ticker is the part you can hold.</p>
 
     <div class="ctas">
-      <a class="btn" href="https://pump.fun" target="_blank" rel="noopener noreferrer">GET $GROKFARM →</a>
+      <a class="btn" href="#buy">GET $GROKFARM →</a>
       <a class="btn ghost" href="#farm">WALK THE ROWS</a>
+    </div>
+
+    <div class="cabar">
+      <div class="cabar-k">CONTRACT ADDRESS · ROBINHOOD CHAIN</div>
+      <div class="cabar-row">
+        <code class="cabar-ca">0x74ebe311785d0e9cfb47e301b7fd697a0439c03e</code>
+        <button class="cabar-btn" type="button" data-copy>COPY</button>
+        <a class="cabar-btn ghost" href="https://robinhoodchain.blockscout.com/token/0x74ebe311785d0e9cfb47e301b7fd697a0439c03e" target="_blank" rel="noopener noreferrer">EXPLORER</a>
+      </div>
+      <div class="cabar-warn">CHECK EVERY CHARACTER BEFORE YOU BUY · ANY OTHER ADDRESS IS A WEED</div>
     </div>
 
     <div class="goalhead">WHERE THE FARM IS HEADED · TARGETS, NOT PROMISES</div>
@@ -449,10 +483,10 @@ a{color:inherit;text-decoration:none}
       <div><div class="k">TARGET MARKET CAP</div><div class="v tab" data-to="100" data-pre="$" data-post="M">$0M</div></div>
       <div><div class="k">TARGET 24H</div><div class="v g tab" data-to="400" data-pre="+" data-post="%">+0%</div></div>
       <div><div class="k">HOLDERS SO FAR</div><div class="v tab" data-to="1400" data-post="+" data-group="1">0+</div></div>
-      <div><div class="k">ON THE CURVE</div><div class="v tab" data-to="100" data-post="%">0%</div></div>
+      <div><div class="k">IN THE MARKET</div><div class="v tab" data-to="100" data-post="%">0%</div></div>
     </div>
-    <div class="simline">PRE-LAUNCH · THE NUMBERS ABOVE ARE GOALS THE FARM IS WORKING TOWARD, NOT<br>
-      GUARANTEES · EVERY CHART AND READOUT ON THIS PAGE IS SIMULATED UNTIL THE MINT LANDS</div>
+    <div class="simline">THE NUMBERS ABOVE ARE GOALS THE FARM IS WORKING TOWARD, NOT GUARANTEES<br>
+      EVERY CHART AND READOUT ON THIS PAGE IS SIMULATED FARM FLAVOUR, NOT LIVE MARKET DATA</div>
 
     <div class="scrollhint"><i></i>SCROLL · TWELVE BOTS BELOW</div>
   </div>
@@ -579,31 +613,31 @@ a{color:inherit;text-decoration:none}
       <span class="secrule"></span><span class="secmeta">SUPPLY · AUTHORITIES · TAX</span>
     </div>
     <h2 class="rv">ONE BILLION KERNELS.<br><span class="out">NOBODY GETS A HEAD START.</span></h2>
-    <p class="lede rv" style="margin-bottom:44px">$GROKFARM is minted on the pump.fun bonding curve. Every kernel
-      goes through the same combine — no presale, no team bag hiding in the back of the shed, no unlock
-      cliff waiting to fall on you in November.</p>
+    <p class="lede rv" style="margin-bottom:44px">One billion $GROKFARM, minted once on Robinhood Chain. Every kernel goes
+      through the same combine — no presale, no team bag hiding in the back of the shed, no unlock cliff
+      waiting to fall on you in November. Everything below is readable on-chain: check it yourself.</p>
 
     <div class="bins rv">
       <div class="bin"><div class="cap">TOTAL SUPPLY</div><div class="val">1 000 000 000</div>
         <div class="binbar"><i style="width:100%"></i></div>
         <p>Fixed at mint. No second planting, ever.</p></div>
-      <div class="bin"><div class="cap">ON THE CURVE</div><div class="val">100%</div>
+      <div class="bin"><div class="cap">IN THE MARKET</div><div class="val">100%</div>
         <div class="binbar"><i style="width:100%"></i></div>
         <p>All of it, bought by whoever shows up at whatever the combine is paying that minute.</p></div>
       <div class="bin"><div class="cap">TEAM ALLOCATION</div><div class="val g">0%</div>
         <div class="binbar"><i class="b" style="width:2%"></i></div>
-        <p>The farmer buys his own bushels off the curve like everyone else, or he goes hungry.</p></div>
-      <div class="bin"><div class="cap">LP AT GRADUATION</div><div class="val g">BURNED</div>
+        <p>The farmer buys his own bushels on the open market like everyone else, or he goes hungry.</p></div>
+      <div class="bin"><div class="cap">READ IT YOURSELF</div><div class="val g">ON-CHAIN</div>
         <div class="binbar"><i class="b" style="width:100%"></i></div>
-        <p>Burned automatically by pump.fun. Nobody can pull the grain cart.</p></div>
+        <p>Supply, holders and every transfer sit on the explorer. <a class="lnk" href="https://robinhoodchain.blockscout.com/token/0x74ebe311785d0e9cfb47e301b7fd697a0439c03e" target="_blank" rel="noopener noreferrer">Open the contract →</a></p></div>
     </div>
 
     <div class="facts rv" style="margin-top:26px">
       <div class="fact"><em>BUY TAX</em><div class="meter"><i style="width:2%;background:var(--green)"></i></div><b>0%</b></div>
       <div class="fact"><em>SELL TAX</em><div class="meter"><i style="width:2%;background:var(--green)"></i></div><b>0%</b></div>
-      <div class="fact"><em>MINT AUTHORITY</em><div class="meter"><i style="width:2%;background:var(--green)"></i></div><b>REVOKED</b></div>
-      <div class="fact"><em>FREEZE AUTHORITY</em><div class="meter"><i style="width:2%;background:var(--green)"></i></div><b>REVOKED</b></div>
-      <div class="fact"><em>CHAIN</em><div class="meter"><i style="width:100%;background:var(--gold)"></i></div><b>SOLANA</b></div>
+      <div class="fact"><em>TOTAL SUPPLY</em><div class="meter"><i style="width:100%;background:var(--gold)"></i></div><b>1B</b></div>
+      <div class="fact"><em>CHAIN</em><div class="meter"><i style="width:100%;background:var(--gold)"></i></div><b>ROBINHOOD</b></div>
+      <div class="fact"><em>CONTRACT</em><div class="meter"><i style="width:100%;background:var(--green)"></i></div><b><a href="https://robinhoodchain.blockscout.com/token/0x74ebe311785d0e9cfb47e301b7fd697a0439c03e" target="_blank" rel="noopener noreferrer">VERIFY →</a></b></div>
     </div>
   </div>
 </section>
@@ -628,7 +662,7 @@ a{color:inherit;text-decoration:none}
       <div class="season now"><div class="stg">STAGE 02</div>
         <div class="sprout"><i style="height:12px"></i><i style="height:20px"></i><i style="height:15px"></i><i style="height:9px"></i></div>
         <h4>SPROUT</h4><div class="state">RUNNING NOW</div>
-        <ul><li>Mint on pump.fun, curve opens</li><li>LP burns at graduation</li>
+        <ul><li>Token minted on Robinhood Chain</li><li>Contract live and verifiable</li>
           <li>Ticker on the aggregators</li><li>Elevator contract signed with holders</li></ul></div>
       <div class="season"><div class="stg">STAGE 03</div>
         <div class="sprout"><i style="height:18px"></i><i style="height:28px"></i><i style="height:23px"></i><i style="height:31px"></i><i style="height:17px"></i></div>
@@ -672,22 +706,26 @@ a{color:inherit;text-decoration:none}
   <p>Twelve bots already work here. The ticker is just how you get a seat in the shed.</p>
 
   <div class="cabox">
-    <code id="caText">CONTRACT ADDRESS — POSTED THE MINUTE THE CURVE OPENS</code>
+    <code id="caText">0x74ebe311785d0e9cfb47e301b7fd697a0439c03e</code>
     <button id="copyBtn" type="button">COPY CA</button>
   </div>
 
   <div class="ctas" style="justify-content:center">
-    <a class="btn grn" href="https://pump.fun" target="_blank" rel="noopener noreferrer">BUY ON PUMP.FUN →</a>
+    <a class="btn grn" href="https://robinhoodchain.blockscout.com/token/0x74ebe311785d0e9cfb47e301b7fd697a0439c03e" target="_blank" rel="noopener noreferrer">VIEW ON EXPLORER →</a>
     <a class="btn ghost" href="https://x.com/Sprytixl" target="_blank" rel="noopener noreferrer">FOLLOW ON X</a>
     <a class="btn ghost" href="https://t.me" target="_blank" rel="noopener noreferrer">JOIN THE SHED</a>
   </div>
+
+  <p class="note">This is the only $GROKFARM address. Check every character against the explorer before you
+    send anything — any other address you see posted is a weed, so pull it.</p>
 </section>
 
 <footer class="foot">
   <span class="px">GROKFARM · CORN GROK · $GROKFARM · ONE HUMAN · TWELVE BOTS · CORN IS MONEY</span>
   <p><b>$GROKFARM is a meme coin. It has no intrinsic value, no revenue, no yield and no promise of profit.</b><br>
   Every number on this page — price, market cap, bushels, treasury, holders, weather — is simulated flavour
-  generated in your browser. None of it is live market data and none of it is financial advice.
+  generated in your browser. None of it is live market data and none of it is financial advice. The one thing
+  here worth trusting is the contract address, and only after you check it on the explorer yourself.
   Memecoins can go to zero. Only risk what you can afford to feed to the hogs.</p>
 </footer>
 
@@ -790,10 +828,10 @@ var tags=bots.map(function(b){var d=document.createElement('div');d.className='t
   d.textContent=b.r.n;d.style.setProperty('--c',b.r.c);layer.appendChild(d);return d;});
 var barkEl=document.createElement('div');barkEl.className='bark';barkEl.style.display='none';layer.appendChild(barkEl);
 var sign=document.createElement('div');sign.className='signboard';
-sign.innerHTML='<div>CORN GROK</div><div class="r">CORN IS MONEY</div><div class="g">PUMP.FUN</div>';
+sign.innerHTML='<div>CORN GROK</div><div class="r">CORN IS MONEY</div><div class="g">$GROKFARM</div>';
 sign.style.left=(52/W*100)+'%';sign.style.top=((YARD-42)/H*100)+'%';layer.appendChild(sign);
 var led=document.createElement('div');led.className='ledsign';
-led.innerHTML='<div>CORN GROK</div><div class="b">PUMP.FUN</div>';
+led.innerHTML='<div>CORN GROK</div><div class="b">0x74EB…C03E</div>';
 led.style.left=(248/W*100)+'%';led.style.top=((YARD-82)/H*100)+'%';layer.appendChild(led);
 function placeTags(){bots.forEach(function(b,i){
   tags[i].style.left=((b.x+3)/W*100)+'%';tags[i].style.top=((b.y-5)/H*100)+'%';});}
@@ -1090,7 +1128,7 @@ say('<span class="d">twelve bots on shift. type</span> <span class="c">help</spa
 var CMDS={
   help:function(){return 'commands: <span class="c">ca</span> · <span class="c">price</span> · <span class="c">crew</span> · <span class="c">silo</span> · <span class="c">field</span> · <span class="c">radio</span> · <span class="c">corn</span> · <span class="c">whoami</span> · <span class="c">clear</span>';},
   radio:function(){return 'farm radio '+(Radio.toggle()?'<span class="g">on</span> — 8-bit shop loop, written by the farm':'<span class="d">off</span>');},
-  ca:function(){return 'contract address: <span class="c">not minted yet</span> — it gets posted here and on X the minute the curve opens. anything you see before that is a weed. pull it.';},
+  ca:function(){return '$GROKFARM on robinhood chain:\n<span class="g">0x74ebe311785d0e9cfb47e301b7fd697a0439c03e</span>\ncheck every character. any other address is a weed — pull it.';},
   price:function(){return '$GROKFARM <span class="g">'+candles[candles.length-1].c.toFixed(2)+'/BU</span> · holders '+fmt(S.holders)+' · <span class="d">simulated, pre-launch</span>';},
   crew:function(){return CREW.map(function(c){return '<span class="c">'+c.n+'</span> — '+c.acts[0];}).join('\n');},
   silo:function(){return 'silo '+S.silo+'% full · on hand '+S.onHand+' BU · moisture '+S.moisture.toFixed(1)+'% · test wt 60.0';},
@@ -1139,11 +1177,29 @@ function onScroll(){
 window.addEventListener('scroll',onScroll,{passive:true});onScroll();
 
 /* ===================== CA COPY ===================== */
-var cbn=document.getElementById('copyBtn');
-cbn.addEventListener('click',function(){
-  var o=cbn.textContent;cbn.textContent='NOT MINTED YET';
-  setTimeout(function(){cbn.textContent=o;},1700);
+var CA='0x74ebe311785d0e9cfb47e301b7fd697a0439c03e';
+function copyCA(btn,okText,backText){
+  function done(msg){
+    var was=btn.textContent;btn.textContent=msg;btn.classList.add('done');
+    setTimeout(function(){btn.textContent=backText||was;btn.classList.remove('done');},1800);
+  }
+  function fallback(){
+    var ta=document.createElement('textarea');ta.value=CA;
+    ta.style.cssText='position:fixed;top:-1000px;opacity:0';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');done(okText);}
+    catch(e){done('SELECT IT');}
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(CA).then(function(){done(okText);},fallback);
+  }else fallback();
+}
+[].slice.call(document.querySelectorAll('[data-copy]')).forEach(function(b){
+  b.addEventListener('click',function(){copyCA(b,'COPIED','COPY');});
 });
+var cbn=document.getElementById('copyBtn');
+if(cbn)cbn.addEventListener('click',function(){copyCA(cbn,'COPIED · CHECK IT','COPY CA');});
 })();
 </script>
 
