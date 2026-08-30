@@ -1,0 +1,1151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="GrokFarm — twelve bots work 240 acres of corn. $GROKFARM on Solana, minted on pump.fun.">
+<meta property="og:title" content="GrokFarm $GROKFARM">
+<meta property="og:description" content="Twelve bots. One row each. Corn is money.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><text y=%2226%22 font-size=%2226%22>&#127805;</text></svg>">
+<style>html{background:#0a0806}body{margin:0}img{max-width:100%}</style>
+<title>GrokFarm $GROKFARM</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Chivo:wght@400;700&family=Press+Start+2P&family=VT323&display=swap');
+
+/* ============================================================
+   GROKFARM — a farm console at 3am. Cream light, gold accent,
+   phosphor green for anything alive, everything else in soil dark.
+   ============================================================ */
+:root{
+  --bg:#0a0806;          /* turned soil at night */
+  --bg-2:#100c08;
+  --bg-3:#161009;
+  --line:#2a2015;
+  --line-2:#3b2d1b;
+  --cream:#efe7d2;
+  --cream-dim:#a99f88;
+  --dim:#8a7f68;
+  --faint:#5e553f;
+  --gold:#e8b93c;
+  --gold-2:#c1902a;
+  --green:#5ef07a;
+  --green-dim:#2f7a3f;
+  --red:#d4553f;
+  --blue:#69a9d6;
+  --violet:#9b7fd4;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--cream-dim);
+  font-family:'Chivo',system-ui,sans-serif;font-size:16px;line-height:1.65;
+  overflow-x:hidden;
+}
+img{max-width:100%}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--gold);color:#12100a}
+.px{font-family:'Press Start 2P',monospace}
+.mono{font-family:'VT323','Courier New',monospace}
+.tab{font-variant-numeric:tabular-nums}
+.disp{font-family:'Archivo Black',Impact,sans-serif;font-weight:400;letter-spacing:-.02em;line-height:.94}
+
+/* ---------- ambient grain + furrow ---------- */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px)}
+.furrow{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden}
+.furrow svg{position:absolute;top:-4vh;left:-6vw;width:46vw;height:420vh;opacity:.55}
+
+/* ---------- header ---------- */
+.hdr{position:sticky;top:0;z-index:60}
+.progress{height:2px;background:var(--line);position:relative}
+.progress i{display:block;height:100%;width:0;background:var(--gold);box-shadow:0 0 12px rgba(232,185,60,.7)}
+.tickbar{background:#0d0a06;border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap;padding:7px 0}
+.tickbar span{display:inline-block;padding-left:100%;animation:slide 42s linear infinite;
+  font-family:'Press Start 2P',monospace;font-size:8px;color:var(--faint);letter-spacing:.1em}
+.tickbar b{color:var(--gold);font-weight:400}
+.tickbar u{text-decoration:none;color:var(--green)}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+.nav{display:flex;align-items:center;gap:26px;padding:16px 34px;
+  background:rgba(10,8,6,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:11px;font-family:'Archivo Black',sans-serif;
+  font-size:16px;color:var(--cream);letter-spacing:.04em}
+.brand .mark{width:22px;height:22px;background:var(--gold);position:relative;flex:0 0 auto;
+  clip-path:polygon(50% 0,100% 27%,100% 73%,50% 100%,0 73%,0 27%)}
+.brand .mark::after{content:'';position:absolute;inset:7px;background:#0a0806;
+  clip-path:polygon(50% 0,100% 27%,100% 73%,50% 100%,0 73%,0 27%)}
+.navlinks{margin-left:auto;display:flex;gap:24px;align-items:center}
+.navlinks a{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--dim);letter-spacing:.1em;
+  padding:6px 0;border-bottom:1px solid transparent;transition:color .18s,border-color .18s}
+.navlinks a:hover,.navlinks a:focus-visible{color:var(--cream);border-color:var(--gold);outline:none}
+.navbuy{font-family:'Press Start 2P',monospace;font-size:9px;color:#150f04;background:var(--gold);
+  padding:13px 17px;clip-path:polygon(0 0,100% 0,100% 68%,calc(100% - 12px) 100%,0 100%);
+  transition:filter .15s,transform .1s}
+.navbuy:hover{filter:brightness(1.12)}
+.navbuy:active{transform:translateY(2px)}
+
+/* ---------- generic section ---------- */
+.sec{position:relative;z-index:2;padding:118px 34px;border-top:1px solid var(--line)}
+.inner{max-width:1360px;margin:0 auto}
+.sechead{display:flex;align-items:center;gap:18px;margin-bottom:44px;flex-wrap:wrap}
+.secnum{font-family:'Press Start 2P',monospace;font-size:9px;background:var(--gold);color:#150f04;padding:7px 8px}
+.seclab{font-family:'Press Start 2P',monospace;font-size:9px;color:var(--dim);letter-spacing:.18em}
+.secrule{flex:1;height:1px;background:linear-gradient(90deg,var(--line-2),transparent);min-width:40px}
+.secmeta{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--faint);letter-spacing:.14em}
+.sec h2{font-family:'Archivo Black',sans-serif;font-weight:400;letter-spacing:-.02em;line-height:1.02;
+  font-size:clamp(34px,5.6vw,74px);color:var(--cream);margin:0 0 22px;text-wrap:balance}
+.sec h2 .out{-webkit-text-stroke:2px var(--gold);color:transparent}
+.lede{max-width:64ch;font-size:19px;color:var(--dim);margin:0}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;z-index:2;padding:118px 34px 90px;overflow:hidden}
+.hero .inner{position:relative}
+.kicker{display:flex;align-items:center;gap:12px;font-family:'Press Start 2P',monospace;
+  font-size:9px;color:var(--dim);letter-spacing:.16em;margin-bottom:34px}
+.dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:blip 2.2s infinite}
+@keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
+.h1{font-family:'Archivo Black',sans-serif;font-size:clamp(58px,13.5vw,190px);line-height:.86;
+  letter-spacing:-.035em;color:var(--cream);margin:0;
+  background-image:repeating-linear-gradient(0deg,#efe7d2 0 3px,#c9c0a8 3px 5px);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.h2out{font-family:'Archivo Black',sans-serif;font-size:clamp(30px,7.4vw,104px);line-height:.98;
+  letter-spacing:-.02em;color:transparent;-webkit-text-stroke:2px var(--gold);margin:6px 0 0}
+.herotext{max-width:56ch;font-size:19px;color:var(--dim);margin:34px 0 0}
+.ctas{display:flex;gap:16px;flex-wrap:wrap;margin-top:40px}
+.btn{font-family:'Press Start 2P',monospace;font-size:10px;padding:19px 24px;border:0;cursor:pointer;
+  background:var(--gold);color:#150f04;
+  clip-path:polygon(0 0,100% 0,100% 66%,calc(100% - 14px) 100%,0 100%);
+  transition:filter .15s,transform .08s;display:inline-block}
+.btn:hover{filter:brightness(1.12)}
+.btn:active{transform:translateY(2px)}
+.btn:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--cream);border:1px solid var(--line-2);clip-path:none;padding:19px 24px}
+.btn.ghost:hover{border-color:var(--gold);color:var(--gold);filter:none}
+.btn.grn{background:var(--green);color:#04150a}
+
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);max-width:1000px}
+.statrow div{padding:20px 22px;border-right:1px solid var(--line)}
+.statrow div:last-child{border-right:0}
+.statrow .k{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--faint);letter-spacing:.14em}
+.statrow .v{font-family:'Chivo',sans-serif;font-weight:700;font-size:clamp(22px,2.6vw,34px);
+  line-height:1.05;color:var(--cream);margin-top:14px}
+.statrow .v.g{color:var(--green)}
+.simline{margin-top:14px;font-family:'Press Start 2P',monospace;font-size:7px;color:var(--faint);letter-spacing:.1em;line-height:2}
+.goalhead{margin-top:56px;margin-bottom:12px;font-family:'Press Start 2P',monospace;font-size:8px;
+  color:var(--gold);letter-spacing:.18em}
+.statrow.goals{margin-top:0}
+
+/* floating hud chips */
+.chip{position:absolute;border:1px solid var(--line-2);background:rgba(16,12,8,.8);padding:10px 12px;z-index:3}
+.chip .k{font-family:'Press Start 2P',monospace;font-size:6.5px;color:var(--faint);letter-spacing:.12em}
+.chip .v{font-family:'VT323',monospace;font-size:17px;color:var(--cream);margin-top:3px}
+.chip .bars{display:flex;gap:2px;margin-top:6px}
+.chip .bars i{width:7px;height:7px;background:var(--gold)}
+.chip .bars i.off{background:var(--line-2)}
+.chip.c1{right:0;top:8px}
+.chip.c2{right:0;top:112px}
+.chip.c3{right:0;bottom:26px}
+#mascot{position:absolute;right:3%;top:232px;width:146px;height:auto;image-rendering:pixelated;z-index:2;
+  animation:bob 4.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+.scrollhint{display:flex;align-items:center;gap:12px;margin-top:66px;
+  font-family:'Press Start 2P',monospace;font-size:8px;color:var(--faint);letter-spacing:.16em}
+.scrollhint i{display:block;width:52px;height:1px;background:var(--gold);animation:stretch 2.4s ease-in-out infinite}
+@keyframes stretch{0%,100%{transform:scaleX(.4);transform-origin:left}50%{transform:scaleX(1);transform-origin:left}}
+
+/* ---------- FARM SCREEN ---------- */
+.screenwrap{position:relative;border:1px solid var(--line-2);background:#8fc9e4;overflow:hidden;
+  container-type:inline-size;box-shadow:0 34px 90px rgba(0,0,0,.55)}
+.screen{position:relative;container-type:inline-size;line-height:0}
+#farmcv{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.layer{position:absolute;inset:0;pointer-events:none}
+.tag{position:absolute;transform:translate(-50%,-100%);font-family:'Press Start 2P',monospace;font-size:1.1cqw;
+  background:#f4ecd6;color:#1a150e;padding:.45em .5em;border:.13em solid #7c6a45;
+  box-shadow:.16em .16em 0 rgba(0,0,0,.35);white-space:nowrap;border-left:.4em solid var(--c,#888)}
+.bark{position:absolute;transform:translate(-50%,-100%);font-family:'Press Start 2P',monospace;font-size:1.5cqw;
+  background:#f4ecd6;color:#1a150e;padding:.5em .6em;border:.13em solid #7c6a45;
+  box-shadow:.2em .2em 0 rgba(0,0,0,.4);white-space:nowrap}
+.signboard,.ledsign{position:absolute;transform:translate(-50%,-100%);text-align:center}
+.signboard{background:#f4ecd6;border:.16em solid #7c6a45;padding:.5em .7em;box-shadow:.2em .2em 0 rgba(0,0,0,.4);line-height:1.5}
+.signboard div{font-family:'Press Start 2P',monospace;font-size:1.3cqw;color:#1a150e}
+.signboard .r{color:#b93b26}
+.signboard .g{background:#0f2b12;color:#5ef07a;display:block;padding:.25em 0;margin-top:.25em}
+.ledsign{background:#0c0e0a;border:.13em solid #2a2a20;padding:.5em .7em}
+.ledsign div{font-family:'Press Start 2P',monospace;font-size:1.2cqw;color:var(--gold);line-height:1.6}
+.ledsign div.b{color:var(--green)}
+.simflag{position:absolute;left:1cqw;top:1cqw;font-family:'Press Start 2P',monospace;font-size:.85cqw;
+  color:#dfeef5;background:rgba(8,12,8,.74);border:1px solid rgba(255,255,255,.22);padding:.6em .7em;letter-spacing:.08em}
+
+/* ops HUD */
+.ops{position:absolute;right:1.2cqw;top:1.2cqw;bottom:1.2cqw;width:23cqw;min-width:200px;
+  background:rgba(7,9,6,.88);border:1px solid rgba(232,185,60,.22);backdrop-filter:blur(3px);
+  overflow-y:auto;font-family:'VT323',monospace;font-size:1.15cqw;line-height:1.25;color:var(--cream-dim);
+  scrollbar-width:thin;scrollbar-color:var(--line-2) transparent}
+.ops h3{margin:0;padding:.55em .7em;font-family:'Press Start 2P',monospace;font-size:.72cqw;color:var(--faint);
+  letter-spacing:.12em;border-bottom:1px solid var(--line);border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;background:#0b0d08;position:sticky;top:0;z-index:2}
+.ops h3:first-child{border-top:0}
+.boss{display:flex;gap:.6em;padding:.7em;align-items:center;border-bottom:1px solid var(--line)}
+.bossav{width:2.6cqw;height:2.6cqw;min-width:26px;min-height:26px;background:#e8e3d2;border:2px solid #3a3f2a;
+  display:grid;place-items:center;font-family:'Press Start 2P',monospace;font-size:1cqw;color:#111;flex:0 0 auto}
+.boss b{color:var(--gold);font-family:'Press Start 2P',monospace;font-size:.8cqw;display:block;margin-bottom:.3em;font-weight:400}
+.boss small{display:block;color:var(--faint);font-size:1.1cqw}
+.boss .doing{color:var(--green)}
+.crow{display:flex;align-items:center;gap:.5em;padding:.12em .7em .12em 0}
+.crow i.bar{width:3px;height:1.15cqw;background:var(--c);margin-left:.6em;flex:0 0 auto}
+.crow .nm{font-family:'Press Start 2P',monospace;font-size:.68cqw;color:var(--cream);width:4.4cqw;min-width:34px;flex:0 0 auto}
+.crow .st{color:var(--dim);flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.crow .dl{color:var(--green-dim)}
+.ro{display:flex;justify-content:space-between;padding:.12em .7em;color:var(--faint)}
+.ro b{color:var(--cream);font-weight:400}
+.sq{padding:.35em .7em}
+.sq div{display:flex;gap:.5em;padding:.1em 0 .1em .5em;border-left:2px solid transparent;color:var(--dim)}
+.sq div.ok{border-color:var(--green-dim)} .sq div.warn{border-color:var(--gold)} .sq div.bad{border-color:var(--red)}
+.sq time{color:var(--faint);flex:0 0 auto}
+.sq em{font-style:normal;color:var(--gold);font-family:'Press Start 2P',monospace;font-size:.62cqw}
+.meter{height:5px;background:#1b1710;flex:1;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--green-dim)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:.25em .9em;padding:.5em .7em}
+.fg .fr{display:flex;align-items:center;gap:.45em}
+.fg .fr span{font-family:'Press Start 2P',monospace;font-size:.6cqw;color:var(--faint)}
+
+/* ---------- DECKS ---------- */
+.decks{display:grid;grid-template-columns:1.9fr 1fr 1.2fr 1.2fr;border:1px solid var(--line)}
+.deck{border-right:1px solid var(--line);background:var(--bg-2);min-width:0}
+.deck:last-child{border-right:0}
+.dh{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--line);
+  font-family:'Press Start 2P',monospace;font-size:7px;color:var(--faint);letter-spacing:.12em}
+.dh b{color:var(--dim);font-weight:400}
+.dbody{padding:14px}
+.bigpx{display:flex;align-items:baseline;gap:10px;padding:14px 14px 0}
+.bigpx em{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--gold);font-style:normal}
+.bigpx b{font-family:'Chivo',sans-serif;font-weight:700;font-size:38px;color:var(--cream);line-height:1}
+.bigpx small{font-family:'VT323',monospace;font-size:18px;color:var(--faint)}
+#pricechart,#treasury{display:block;width:100%;height:auto}
+.kv{display:flex;justify-content:space-between;padding:3px 0;font-family:'VT323',monospace;font-size:18px;color:var(--faint)}
+.kv b{color:var(--cream);font-weight:400}
+.kv .neg{color:var(--red)} .kv .pos{color:var(--green)}
+.mrow{display:flex;align-items:center;gap:9px;padding:3px 0}
+.mrow span{font-family:'Press Start 2P',monospace;font-size:6px;color:var(--faint);width:46px}
+.mrow b{width:26px;text-align:right;font-family:'VT323',monospace;font-size:17px;color:var(--cream);font-weight:400}
+.led{background:#040703;border:1px solid #17240f;padding:16px 12px;text-align:center;box-shadow:inset 0 0 30px rgba(56,224,96,.14)}
+.led .num{font-family:'Press Start 2P',monospace;font-size:24px;color:var(--green);text-shadow:0 0 14px rgba(94,240,122,.55)}
+.led .sub{font-family:'VT323',monospace;font-size:16px;color:var(--green-dim);margin-top:8px}
+.tape{width:100%;border-collapse:collapse;font-family:'VT323',monospace;font-size:18px}
+.tape td{padding:3px 0;color:var(--dim);white-space:nowrap}
+.tape td.k{font-family:'Press Start 2P',monospace;font-size:6px;color:var(--faint)}
+.tape td.n{text-align:right;color:var(--cream)}
+.tape td.p{text-align:right;color:var(--faint);padding-left:10px}
+
+/* ---------- CREW GRID ---------- */
+.crewgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.card{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 22px;
+  background:var(--bg-2);position:relative;overflow:hidden;transition:background .25s}
+.cardglow{position:absolute;left:-30%;top:-60%;width:60%;height:200%;
+  background:radial-gradient(closest-side,rgba(232,185,60,.1),transparent);opacity:0;transition:opacity .3s}
+.card:hover{background:var(--bg-3)}
+.card:hover .cardglow{opacity:1}
+.card .id{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--gold);letter-spacing:.1em}
+.card h4{font-family:'Archivo Black',sans-serif;font-weight:400;font-size:19px;color:var(--cream);margin:14px 0 8px}
+.card p{margin:0;font-size:15px;color:var(--dim)}
+.card .st{display:flex;gap:4px;margin-top:18px}
+.card .st i{height:3px;flex:1;background:var(--line-2)}
+.card .st i.on{background:var(--c)}
+
+/* ---------- SILO / TOKENOMICS ---------- */
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2px}
+.bin{background:var(--bg-2);border:1px solid var(--line);padding:26px 24px}
+.bin .cap{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--faint);letter-spacing:.12em}
+.bin .val{font-family:'Archivo Black',sans-serif;font-size:26px;color:var(--gold);margin:18px 0 12px}
+.bin .val.g{color:var(--green)}
+.bin p{margin:0;font-size:15px;color:var(--dim)}
+.binbar{height:8px;background:#1b1710;margin:12px 0}
+.binbar i{display:block;height:100%;background:var(--gold)}
+.binbar i.b{background:var(--green-dim)}
+.facts{display:grid;gap:2px;margin-top:2px}
+.fact{display:grid;grid-template-columns:190px 1fr auto;gap:18px;align-items:center;
+  background:var(--bg-2);border:1px solid var(--line);padding:15px 22px}
+.fact em{font-style:normal;font-family:'Press Start 2P',monospace;font-size:7.5px;color:var(--cream);letter-spacing:.1em}
+.fact b{font-family:'Press Start 2P',monospace;font-size:10px;color:var(--gold);font-weight:400}
+.fact .meter{height:6px}
+
+/* ---------- SEASONS ---------- */
+.seasons{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));border-left:1px solid var(--line);border-top:1px solid var(--line)}
+.season{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 24px;background:var(--bg-2)}
+.season .stg{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--faint);letter-spacing:.14em}
+.sprout{display:flex;gap:4px;align-items:flex-end;height:34px;margin:20px 0 14px}
+.sprout i{width:7px;background:var(--green-dim);display:block}
+.season h4{font-family:'Archivo Black',sans-serif;font-weight:400;font-size:23px;margin:0 0 10px;color:var(--gold)}
+.season.done h4{color:var(--green)}
+.state{font-family:'Press Start 2P',monospace;font-size:6.5px;padding:5px 7px;display:inline-block;
+  background:#1b1710;color:var(--faint);margin-bottom:18px}
+.season.done .state{background:var(--green-dim);color:#04150a}
+.season.now .state{background:var(--gold);color:#150f04}
+.season ul{margin:0;padding-left:17px;font-size:15px;color:var(--dim)}
+.season li{padding:4px 0}
+
+/* ---------- TERMINAL ---------- */
+.term{border:1px solid var(--line-2);background:#060804;font-family:'VT323',monospace;font-size:19px}
+.termbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:#0a0d07}
+.termbar i{width:9px;height:9px;border-radius:50%;background:var(--line-2)}
+.termbar i:first-child{background:var(--red)} .termbar i:nth-child(2){background:var(--gold)} .termbar i:nth-child(3){background:var(--green-dim)}
+.termbar span{margin-left:8px;font-family:'Press Start 2P',monospace;font-size:7px;color:var(--faint);letter-spacing:.12em}
+.termout{padding:18px;min-height:270px;max-height:340px;overflow-y:auto;color:var(--cream-dim);white-space:pre-wrap}
+.termout .c{color:var(--gold)} .termout .g{color:var(--green)} .termout .d{color:var(--faint)}
+.terminp{display:flex;align-items:center;gap:9px;padding:13px 18px;border-top:1px solid var(--line)}
+.terminp span{color:var(--gold)}
+.terminp input{flex:1;min-width:0;width:100%;background:transparent;border:0;outline:none;color:var(--green);
+  font-family:'VT323',monospace;font-size:19px}
+.termhint{margin-top:14px;font-family:'VT323',monospace;font-size:17px;color:var(--faint)}
+.termhint b{color:var(--gold);font-weight:400}
+
+/* ---------- CA / CLOSER ---------- */
+.closer{text-align:center;padding:130px 34px 120px;border-top:1px solid var(--line);
+  background:radial-gradient(120% 90% at 50% 100%,rgba(232,185,60,.07),transparent 70%)}
+.closer .eyeb{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--gold);letter-spacing:.2em}
+.closer h2{font-family:'Archivo Black',sans-serif;font-weight:400;font-size:clamp(42px,10vw,140px);
+  line-height:.92;letter-spacing:-.035em;color:var(--cream);margin:26px 0 18px;
+  background-image:repeating-linear-gradient(0deg,#efe7d2 0 3px,#c3ba9f 3px 5px);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.closer p{max-width:52ch;margin:0 auto;font-size:19px;color:var(--dim)}
+.cabox{display:flex;align-items:stretch;border:1px dashed var(--line-2);background:#0b0e07;
+  max-width:840px;margin:44px auto 26px}
+.cabox code{flex:1;padding:19px 16px;font-family:'VT323',monospace;font-size:20px;color:var(--dim);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left}
+.cabox button{border:0;border-left:1px dashed var(--line-2);background:#12100a;color:var(--cream);
+  font-family:'Press Start 2P',monospace;font-size:8px;padding:0 20px;cursor:pointer;letter-spacing:.1em}
+.cabox button:hover{background:var(--gold);color:#150f04}
+
+.foot{padding:52px 34px 76px;text-align:center;background:#050703;border-top:1px solid var(--line);position:relative;z-index:2}
+.foot .px{display:block;font-size:8px;color:var(--faint);letter-spacing:.14em;line-height:2.4;margin-bottom:20px}
+.foot p{max-width:74ch;margin:0 auto;font-size:14px;color:var(--faint);line-height:1.9}
+.foot b{color:var(--dim);font-weight:400}
+
+/* farm radio */
+.radio{position:fixed;left:20px;bottom:20px;z-index:56;display:flex;align-items:center;gap:11px;
+  border:1px solid var(--line-2);background:rgba(10,8,6,.92);padding:11px 14px;cursor:pointer;
+  font-family:'Press Start 2P',monospace;font-size:8px;color:var(--dim);letter-spacing:.12em;
+  transition:border-color .2s,color .2s;text-align:left}
+.radio:hover{border-color:var(--gold);color:var(--cream)}
+.radio:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.radio .eq{display:flex;align-items:flex-end;gap:2px;height:14px;width:17px;flex:0 0 auto}
+.radio .eq i{width:3px;height:3px;background:var(--faint);transition:background .2s}
+.radio.on{color:var(--cream);border-color:rgba(232,185,60,.55)}
+.radio.on .eq i{background:var(--gold);animation:eq .7s ease-in-out infinite alternate}
+.radio.on .eq i:nth-child(2){animation-duration:.46s}
+.radio.on .eq i:nth-child(3){animation-duration:.92s}
+.radio.on .eq i:nth-child(4){animation-duration:.6s}
+@keyframes eq{from{height:3px}to{height:14px}}
+.radio b{font-weight:400;display:block}
+.radio small{display:block;font-size:6.5px;color:var(--faint);letter-spacing:.1em;margin-top:5px}
+
+/* section counter */
+.counter{position:fixed;right:20px;bottom:20px;z-index:55;border:1px solid var(--line-2);
+  background:rgba(10,8,6,.9);padding:11px 13px;text-align:right;pointer-events:none}
+.counter .n{font-family:'Press Start 2P',monospace;font-size:7px;color:var(--faint);letter-spacing:.14em}
+.counter .l{font-family:'Press Start 2P',monospace;font-size:8px;color:var(--gold);letter-spacing:.14em;margin-top:6px}
+.counter .bars{display:flex;gap:2px;justify-content:flex-end;margin-top:7px}
+.counter .bars i{width:6px;height:6px;background:var(--line-2)}
+.counter .bars i.on{background:var(--gold)}
+
+@media (max-width:1100px){
+  .decks{grid-template-columns:1fr 1fr}
+  .deck{border-bottom:1px solid var(--line)}
+  .navlinks{display:none}
+  .chip,#mascot{display:none}
+  .ops{position:static;width:auto;min-width:0;border:1px solid var(--line);border-top:0;
+    font-size:16px;max-height:420px}
+  .ops h3{font-size:7px} .boss b{font-size:8px} .boss small{font-size:15px}
+  .crow .nm{font-size:7px;width:44px} .crow i.bar{height:15px}
+  .fg .fr span{font-size:6px} .sq em{font-size:6px} .bossav{font-size:11px}
+  .tag,.bark{font-size:2cqw} .signboard div,.ledsign div{font-size:2.1cqw} .simflag{font-size:1.4cqw}
+  .fact{grid-template-columns:150px 1fr auto;gap:12px}
+}
+@media (max-width:660px){
+  .sec,.hero{padding-left:20px;padding-right:20px}
+  .decks{grid-template-columns:1fr}
+  .statrow{grid-template-columns:1fr 1fr}
+  .statrow div:nth-child(2){border-right:0}
+  .statrow div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .fact{grid-template-columns:1fr auto}
+  .fact .meter{display:none}
+  .counter{display:none}
+  .nav{padding:13px 20px}
+  .radio{left:12px;bottom:12px;padding:9px 11px;font-size:7px}
+  .radio small{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .tickbar span{animation:none;padding-left:0}
+  .rv{opacity:1;transform:none;transition:none}
+  #mascot,.dot,.scrollhint i{animation:none}
+}
+</style></head>
+<body>
+
+
+<div class="grain"></div>
+<div class="furrow" aria-hidden="true">
+  <svg viewBox="0 0 400 3000" preserveAspectRatio="none">
+    <path d="M60,0 C240,320 20,620 150,940 C280,1260 40,1520 130,1860 C220,2200 60,2500 190,3000"
+      fill="none" stroke="#e8b93c" stroke-width="2" stroke-dasharray="14 9" opacity=".38"/>
+    <path d="M92,0 C272,320 52,620 182,940 C312,1260 72,1520 162,1860 C252,2200 92,2500 222,3000"
+      fill="none" stroke="#5ef07a" stroke-width="1" opacity=".16"/>
+  </svg>
+</div>
+
+<!-- ===================== HEADER ===================== -->
+<header class="hdr">
+  <div class="progress"><i id="prog"></i></div>
+  <div class="tickbar"><span id="tick">CORN IS MONEY · TWELVE BOTS ONE HUMAN · <b>$GROKFARM LIVE ON SOLANA</b> · MINTED ON <u>PUMP.FUN</u> · MINT AUTHORITY <b>REVOKED</b> · VERIFY THE CA BEFORE EVERY BUY · 240 ACRES · THE COMBINE DOES NOT STOP · CORN IS MONEY · TWELVE BOTS ONE HUMAN · <b>$GROKFARM LIVE ON SOLANA</b> · MINTED ON <u>PUMP.FUN</u> · MINT AUTHORITY <b>REVOKED</b> · VERIFY THE CA BEFORE EVERY BUY · 240 ACRES · THE COMBINE DOES NOT STOP · </span></div>
+  <nav class="nav">
+    <a class="brand" href="#top"><span class="mark"></span>GROKFARM</a>
+    <div class="navlinks">
+      <a href="#farm">THE FARM</a>
+      <a href="#chart">CHART</a>
+      <a href="#crew">THE CREW</a>
+      <a href="#silo">THE SILO</a>
+      <a href="#seasons">SEASONS</a>
+      <a href="#terminal">TERMINAL</a>
+    </div>
+    <a class="navbuy" href="https://pump.fun" target="_blank" rel="noopener noreferrer">BUY $GROKFARM</a>
+  </nav>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="top">
+  <div class="inner">
+    <div class="chip c1">
+      <div class="k">FIELD STATUS</div><div class="v">12 BOTS ON SHIFT</div>
+      <div class="bars"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="chip c2">
+      <div class="k">NETWORK</div><div class="v">SOLANA · PUMP.FUN</div>
+      <div class="bars"><i></i><i></i><i></i><i class="off"></i><i class="off"></i><i class="off"></i></div>
+    </div>
+    <div class="chip c3">
+      <div class="k">FUEL: CONVICTION</div><div class="v">GOAL · $100M CAP</div>
+      <div class="bars"><i></i><i></i><i></i><i></i><i class="off"></i><i class="off"></i></div>
+    </div>
+    <canvas id="mascot" width="72" height="96" aria-hidden="true"></canvas>
+
+    <div class="kicker"><span class="dot"></span>SOLANA · PUMP.FUN · $GROKFARM</div>
+    <h1 class="h1">GROKFARM</h1>
+    <div class="h2out">CORN IS MONEY</div>
+    <p class="herotext">Nobody wrote a thread about agents. Twelve bots got put in a corn field and told to
+      work it — seed, water, scout, spray, harvest, haul, dry, grade, load. One human signs the elevator
+      contract at the end of the day. The ticker is the part you can hold.</p>
+
+    <div class="ctas">
+      <a class="btn" href="https://pump.fun" target="_blank" rel="noopener noreferrer">GET $GROKFARM →</a>
+      <a class="btn ghost" href="#farm">WALK THE ROWS</a>
+    </div>
+
+    <div class="goalhead">WHERE THE FARM IS HEADED · TARGETS, NOT PROMISES</div>
+    <div class="statrow">
+      <div><div class="k">TARGET MARKET CAP</div><div class="v tab" data-to="100" data-pre="$" data-post="M">$0M</div></div>
+      <div><div class="k">TARGET 24H</div><div class="v g tab" data-to="400" data-pre="+" data-post="%">+0%</div></div>
+      <div><div class="k">HOLDERS SO FAR</div><div class="v tab" data-to="1400" data-post="+" data-group="1">0+</div></div>
+      <div><div class="k">ON THE CURVE</div><div class="v tab" data-to="100" data-post="%">0%</div></div>
+    </div>
+    <div class="simline">PRE-LAUNCH · THE NUMBERS ABOVE ARE GOALS THE FARM IS WORKING TOWARD, NOT<br>
+      GUARANTEES · EVERY CHART AND READOUT ON THIS PAGE IS SIMULATED UNTIL THE MINT LANDS</div>
+
+    <div class="scrollhint"><i></i>SCROLL · TWELVE BOTS BELOW</div>
+  </div>
+</section>
+
+<!-- ===================== 01 THE FARM ===================== -->
+<section class="sec" id="farm" data-name="THE FARM">
+  <div class="inner">
+    <div class="sechead rv">
+      <span class="secnum">01</span><span class="seclab">THE FARM</span>
+      <span class="secrule"></span><span class="secmeta">240 ACRES · SEASON 3 · DAY 41</span>
+    </div>
+    <h2 class="rv">THE COMBINE DOES NOT<br>STOP FOR YOUR CHART.</h2>
+    <p class="lede rv" style="margin-bottom:44px">This is the farm, running right now in your browser. The
+      crew walks the rows, the combine opens row one, the dryer pulls moisture, the load-out tape prints.
+      Nobody is waiting on a meeting.</p>
+
+    <div class="screenwrap rv">
+      <div class="screen">
+        <canvas id="farmcv" width="440" height="210" role="img"
+          aria-label="Animated pixel-art corn farm: twelve bots working the rows, a combine harvesting, silos and a grain dryer."></canvas>
+        <div class="layer" id="layer"></div>
+        <div class="simflag">SIMULATED FARM · NOT MARKET DATA</div>
+      </div>
+      <aside class="ops" id="ops">
+        <h3>FARM OPS <span>SEASON 3</span></h3>
+        <div class="boss">
+          <div class="bossav">″</div>
+          <div><b>GROK BOT</b><small>boss · runs the farm</small><small class="doing" id="bossDoing">checking mech</small></div>
+        </div>
+        <h3>THE CREW <span id="crewCount">12 ON SHIFT</span></h3>
+        <div id="crewList"></div>
+        <h3>THE FIELD <span>6 ROWS</span></h3>
+        <div class="fg" id="fieldGrid"></div>
+        <div class="ro"><span>ON HAND</span><b class="tab" id="onHand">521 BU</b></div>
+        <div class="ro"><span>MOISTURE</span><b class="tab" id="moist">19.6%</b></div>
+        <div class="ro"><span>TEST WT</span><b class="tab">60.0</b></div>
+        <h3>SKY &amp; SILO</h3>
+        <div class="ro"><span>WIND</span><b class="tab" id="wind">6 KT</b></div>
+        <div class="ro"><span>TEMP</span><b class="tab" id="temp">14°</b></div>
+        <div class="ro"><span>RAIN</span><b class="tab" id="rain">1.40"</b></div>
+        <div class="ro"><span>SILO</span><b class="tab" id="siloPct">4%</b></div>
+        <h3>SQUAWK</h3>
+        <div class="sq" id="squawk"></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 02 THE CHART ===================== -->
+<section class="sec" id="chart" data-name="THE CHART">
+  <div class="inner">
+    <div class="sechead rv">
+      <span class="secnum">02</span><span class="seclab">THE CHART</span>
+      <span class="secrule"></span><span class="secmeta">ELEVATOR DESK · TWO WAY</span>
+    </div>
+    <h2 class="rv">CORN GOES UP,<br><span class="out">CORN GOES DOWN.</span></h2>
+    <p class="lede rv" style="margin-bottom:44px">The desk prices bushels the way the market prices a ticker:
+      a bid, a basis, a carry and a number that moves whether you are watching or not.</p>
+
+    <div class="decks rv">
+      <div class="deck">
+        <div class="dh"><span>$GROKFARM · PRICE</span><b>SIMULATED</b></div>
+        <div class="bigpx"><em>$GROKFARM</em><b class="tab" id="pxNow">5.63</b><small>/BU</small><small id="pxChg" style="color:var(--green)">+16.8%</small></div>
+        <div class="dbody" style="padding-top:6px"><canvas id="pricechart" width="560" height="300"></canvas></div>
+      </div>
+      <div class="deck">
+        <div class="dh"><span>THE BOOK</span><b>DESK</b></div>
+        <div class="dbody tab">
+          <div class="kv"><span>SPOT</span><b id="bkSpot">5.63</b></div>
+          <div class="kv"><span>BASIS</span><b class="neg" id="bkBasis">-0.19</b></div>
+          <div class="kv"><span>NET BID</span><b id="bkBid">5.44</b></div>
+          <div class="kv"><span>DEC FUT</span><b id="bkFut">5.84</b></div>
+          <div class="kv"><span>ON HAND</span><b id="bkHand">521 BU</b></div>
+          <div class="kv"><span>VALUE</span><b class="pos" id="bkVal">$2.8K</b></div>
+          <div class="kv"><span>VOL</span><b id="bkVol">270.4K</b></div>
+          <div class="kv"><span>OPEN INT</span><b id="bkOi">919.2K</b></div>
+          <div class="kv"><span>HOLDERS</span><b id="bkHold">1 402</b></div>
+        </div>
+      </div>
+      <div class="deck">
+        <div class="dh"><span>TREASURY</span><b>SEASON 3</b></div>
+        <div class="dbody">
+          <canvas id="treasury" width="320" height="120"></canvas>
+          <div class="kv" style="border-bottom:1px solid var(--line);padding-bottom:8px;margin:8px 0">
+            <span>SOLD <b id="trSold">3 565</b> BU</span><b id="trCash">$18 292</b></div>
+          <div class="mrow"><span>HEDGED</span><div class="meter"><i style="width:38%"></i></div><b>38</b></div>
+          <div class="mrow"><span>BASIS</span><div class="meter"><i style="width:51%;background:var(--gold-2)"></i></div><b>51</b></div>
+          <div class="mrow"><span>CARRY</span><div class="meter"><i style="width:62%;background:var(--gold)"></i></div><b>62</b></div>
+          <div class="mrow"><span>SPACE</span><div class="meter"><i style="width:96%"></i></div><b>96</b></div>
+        </div>
+      </div>
+      <div class="deck">
+        <div class="dh"><span>LOAD-OUT TAPE</span><b style="color:var(--green)">TODAY</b></div>
+        <div class="dbody">
+          <div class="led"><div class="num tab" id="ledNum">13.490</div><div class="sub">SOL MOVED · SIMULATED</div></div>
+          <table class="tape tab" id="tape" style="margin-top:12px"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 03 THE CREW ===================== -->
+<section class="sec" id="crew" data-name="THE CREW">
+  <div class="inner">
+    <div class="sechead rv">
+      <span class="secnum">03</span><span class="seclab">THE CREW</span>
+      <span class="secrule"></span><span class="secmeta">TWELVE BOTS · ONE NARROW JOB EACH</span>
+    </div>
+    <h2 class="rv">TWELVE BOTS.<br>ONE ROW EACH.</h2>
+    <p class="lede rv" style="margin-bottom:44px">One agent doing everything badly is how a field goes to
+      weeds. Each bot owns one job on the farm and hands the work to the next one. Nothing gets sold
+      without the last human yes.</p>
+    <div class="crewgrid rv" id="crewGrid"></div>
+  </div>
+</section>
+
+<!-- ===================== 04 THE SILO ===================== -->
+<section class="sec" id="silo" data-name="THE SILO">
+  <div class="inner">
+    <div class="sechead rv">
+      <span class="secnum">04</span><span class="seclab">THE SILO</span>
+      <span class="secrule"></span><span class="secmeta">SUPPLY · AUTHORITIES · TAX</span>
+    </div>
+    <h2 class="rv">ONE BILLION KERNELS.<br><span class="out">NOBODY GETS A HEAD START.</span></h2>
+    <p class="lede rv" style="margin-bottom:44px">$GROKFARM is minted on the pump.fun bonding curve. Every kernel
+      goes through the same combine — no presale, no team bag hiding in the back of the shed, no unlock
+      cliff waiting to fall on you in November.</p>
+
+    <div class="bins rv">
+      <div class="bin"><div class="cap">TOTAL SUPPLY</div><div class="val">1 000 000 000</div>
+        <div class="binbar"><i style="width:100%"></i></div>
+        <p>Fixed at mint. No second planting, ever.</p></div>
+      <div class="bin"><div class="cap">ON THE CURVE</div><div class="val">100%</div>
+        <div class="binbar"><i style="width:100%"></i></div>
+        <p>All of it, bought by whoever shows up at whatever the combine is paying that minute.</p></div>
+      <div class="bin"><div class="cap">TEAM ALLOCATION</div><div class="val g">0%</div>
+        <div class="binbar"><i class="b" style="width:2%"></i></div>
+        <p>The farmer buys his own bushels off the curve like everyone else, or he goes hungry.</p></div>
+      <div class="bin"><div class="cap">LP AT GRADUATION</div><div class="val g">BURNED</div>
+        <div class="binbar"><i class="b" style="width:100%"></i></div>
+        <p>Burned automatically by pump.fun. Nobody can pull the grain cart.</p></div>
+    </div>
+
+    <div class="facts rv" style="margin-top:26px">
+      <div class="fact"><em>BUY TAX</em><div class="meter"><i style="width:2%;background:var(--green)"></i></div><b>0%</b></div>
+      <div class="fact"><em>SELL TAX</em><div class="meter"><i style="width:2%;background:var(--green)"></i></div><b>0%</b></div>
+      <div class="fact"><em>MINT AUTHORITY</em><div class="meter"><i style="width:2%;background:var(--green)"></i></div><b>REVOKED</b></div>
+      <div class="fact"><em>FREEZE AUTHORITY</em><div class="meter"><i style="width:2%;background:var(--green)"></i></div><b>REVOKED</b></div>
+      <div class="fact"><em>CHAIN</em><div class="meter"><i style="width:100%;background:var(--gold)"></i></div><b>SOLANA</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 05 SEASONS ===================== -->
+<section class="sec" id="seasons" data-name="SEASONS">
+  <div class="inner">
+    <div class="sechead rv">
+      <span class="secnum">05</span><span class="seclab">SEASONS</span>
+      <span class="secrule"></span><span class="secmeta">SEED → SPROUT → TASSEL → HARVEST</span>
+    </div>
+    <h2 class="rv">CORN DOES NOT<br>DO QUARTERS.</h2>
+    <p class="lede rv" style="margin-bottom:44px">It does seed, sprout, tassel, harvest — in that order, and
+      the order is the whole point. Each season only opens when the one before it is in the bin.</p>
+
+    <div class="seasons rv">
+      <div class="season done"><div class="stg">STAGE 01</div>
+        <div class="sprout"><i style="height:6px"></i><i style="height:10px"></i><i style="height:7px"></i></div>
+        <h4>SEED</h4><div class="state">IN THE BIN</div>
+        <ul><li>Twelve bots wired up and walking rows</li><li>Farm console built, telemetry live</li>
+          <li>Ground broken on 240 acres</li><li>First thousand kernels planted</li></ul></div>
+      <div class="season now"><div class="stg">STAGE 02</div>
+        <div class="sprout"><i style="height:12px"></i><i style="height:20px"></i><i style="height:15px"></i><i style="height:9px"></i></div>
+        <h4>SPROUT</h4><div class="state">RUNNING NOW</div>
+        <ul><li>Mint on pump.fun, curve opens</li><li>LP burns at graduation</li>
+          <li>Ticker on the aggregators</li><li>Elevator contract signed with holders</li></ul></div>
+      <div class="season"><div class="stg">STAGE 03</div>
+        <div class="sprout"><i style="height:18px"></i><i style="height:28px"></i><i style="height:23px"></i><i style="height:31px"></i><i style="height:17px"></i></div>
+        <h4>TASSEL</h4><div class="state">NOT YET</div>
+        <ul><li>CORN GROK terminal opens to holders</li><li>On-chain yield board — big bags farm more acres</li>
+          <li>The meme combine: one-click farm posters</li><li>Merch shed and the feed cap</li></ul></div>
+      <div class="season"><div class="stg">STAGE 04</div>
+        <div class="sprout"><i style="height:24px;background:var(--gold)"></i><i style="height:32px;background:var(--gold)"></i><i style="height:27px;background:var(--gold)"></i><i style="height:34px;background:var(--gold)"></i><i style="height:22px;background:var(--gold)"></i><i style="height:30px;background:var(--gold)"></i></div>
+        <h4>HARVEST</h4><div class="state">NOT YET</div>
+        <ul><li>GrokFarm goes playable — run your own crew</li><li>More acres: the south forty</li>
+          <li>The silo opens on a centralized exchange</li><li>Treasury handed to the field</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 06 TERMINAL ===================== -->
+<section class="sec" id="terminal" data-name="TERMINAL">
+  <div class="inner">
+    <div class="sechead rv">
+      <span class="secnum">06</span><span class="seclab">TERMINAL</span>
+      <span class="secrule"></span><span class="secmeta">GROK BOT · TYPE AND HIT ENTER</span>
+    </div>
+    <h2 class="rv">TALK TO THE<br>FARM DIRECT.</h2>
+    <p class="lede rv" style="margin-bottom:44px">The boss bot keeps a shell open in the shop. Ask it what
+      the crew is doing, what the silo holds, or where the contract address is.</p>
+
+    <div class="term rv">
+      <div class="termbar"><i></i><i></i><i></i><span>GROK@FARM — SHOP TERMINAL</span></div>
+      <div class="termout mono" id="termOut"></div>
+      <label class="terminp"><span>grok@farm:~$</span>
+        <input id="termIn" autocomplete="off" spellcheck="false" aria-label="Farm terminal command"></label>
+    </div>
+    <div class="termhint">Try: <b>help</b> · <b>ca</b> · <b>price</b> · <b>crew</b> · <b>silo</b> · <b>radio</b> · <b>corn</b> · <b>whoami</b></div>
+  </div>
+</section>
+
+<!-- ===================== CLOSER ===================== -->
+<section class="closer" id="buy">
+  <div class="eyeb">ONE ADDRESS · VERIFY IT EVERY TIME</div>
+  <h2>HOLD THE FARM</h2>
+  <p>Twelve bots already work here. The ticker is just how you get a seat in the shed.</p>
+
+  <div class="cabox">
+    <code id="caText">CONTRACT ADDRESS — POSTED THE MINUTE THE CURVE OPENS</code>
+    <button id="copyBtn" type="button">COPY CA</button>
+  </div>
+
+  <div class="ctas" style="justify-content:center">
+    <a class="btn grn" href="https://pump.fun" target="_blank" rel="noopener noreferrer">BUY ON PUMP.FUN →</a>
+    <a class="btn ghost" href="https://x.com/Sprytixl" target="_blank" rel="noopener noreferrer">FOLLOW ON X</a>
+    <a class="btn ghost" href="https://t.me" target="_blank" rel="noopener noreferrer">JOIN THE SHED</a>
+  </div>
+</section>
+
+<footer class="foot">
+  <span class="px">GROKFARM · CORN GROK · $GROKFARM · ONE HUMAN · TWELVE BOTS · CORN IS MONEY</span>
+  <p><b>$GROKFARM is a meme coin. It has no intrinsic value, no revenue, no yield and no promise of profit.</b><br>
+  Every number on this page — price, market cap, bushels, treasury, holders, weather — is simulated flavour
+  generated in your browser. None of it is live market data and none of it is financial advice.
+  Memecoins can go to zero. Only risk what you can afford to feed to the hogs.</p>
+</footer>
+
+<div class="counter" id="counter">
+  <div class="n">01 / 06</div><div class="l">THE FARM</div>
+  <div class="bars"><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+</div>
+
+<button class="radio" id="radio" type="button" aria-pressed="false">
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span><b id="radioLabel">FARM RADIO · OFF</b><small>8-BIT SHOP LOOP</small></span>
+</button>
+
+<script>
+(function(){
+'use strict';
+var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ===================== CREW DATA ===================== */
+var CREW=[
+ {n:'CHIEF',c:'#e8b93c',lane:0,job:'Walks the rows and decides what happens next. The only bot the others answer to.',acts:['walking the rows','counting the stand','on the radio','checking the book']},
+ {n:'SEED',c:'#5ec46a',lane:1,job:'Fills the box, sets the spacing, puts every kernel where it belongs.',acts:['crossing the yard','filling the box','row 06 is back in seed','singulating']},
+ {n:'WATER',c:'#69a9d6',lane:0,job:'Runs the pivot and the gauges. Knows exactly how thirsty the field is.',acts:['on the irrigation','moving the pivot','pulling a hose','reading the gauge']},
+ {n:'SCOUT',c:'#9b7fd4',lane:1,job:'Counts stand, pulls tissue tests, finds the trouble before it spreads.',acts:['counting the stand','crossing the yard','pulling a tissue test','walking the ditch']},
+ {n:'SPRAY',c:'#d47fb0',lane:0,job:'Mixes the tank and walks the boom. Nothing goes out in the wrong wind.',acts:['walking the spray','mixing the tank','folding the booms','washing out']},
+ {n:'HARV',c:'#e07a3c',lane:2,job:'Sits in the combine. Opens the row and does not stop until the row is done.',acts:['in the combine','opening row 01','on the header','unloading on the go']},
+ {n:'HAUL',c:'#c9713a',lane:1,job:'Runs the grain cart between the combine and the pit, all day, every day.',acts:['on the grain cart','under the spout','pulling for the pit','tarping up']},
+ {n:'DRY',c:'#d4553f',lane:0,job:'Owns the dryer and the moisture number. Burns propane so the silo does not rot.',acts:['at the dryer','pulling moisture','turning up the burner','cooling a batch']},
+ {n:'GRADE',c:'#7fd4c0',lane:1,job:'Probes every load, calls the grade, and docks what deserves docking.',acts:['pulling a sample','crossing the yard','on the probe','docking for damage']},
+ {n:'LOAD',c:'#e8e0c0',lane:0,job:'Weighs out, seals the hopper, and gets the truck off the scale.',acts:['at the load-out','truck is under the spout','sealing the hopper','weighing out']},
+ {n:'MECH',c:'#8a8f7a',lane:2,job:'Under the header with a wrench. The reason nothing sits waiting on a person.',acts:['under the header','changing a belt','greasing the auger','torquing bolts']},
+ {n:'WX',c:'#5ef07a',lane:1,job:'Reads the sky and the radar, and calls the rain before it lands on the swath.',acts:['reading the sky','crossing the yard','watching the radar','calling the rain']}
+];
+var BARKS=['WIND IS OK','DUMPING NOW','BELT IS TIGHT','CLEAN CUT','RAIN BY THREE','ONE MORE LOAD','DRYER IS HOT',
+'KEEP GOING MECH','GIVE IT AN INCH','CHIEF IS CLEAN','CORN IS MONEY','SILO IS FILLING','MOISTURE AT 17',
+'HEDGE THE CARRY','TRUCK IS HERE','ROW SIX IS THIN','SEND IT','GRADE TWO','TOP OFF THE CART','HEADER IS DOWN'];
+
+/* ===================== FARM CANVAS ===================== */
+var cv=document.getElementById('farmcv'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+function px(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x|0,y|0,w|0,h|0);}
+var HORIZON=74,YARD=150;
+var clouds=[{x:40,y:18,s:3},{x:150,y:12,s:4},{x:250,y:26,s:2},{x:340,y:16,s:3},{x:410,y:30,s:2}];
+var combineX=-40,cutRow=0,frame=0;
+var bots=CREW.map(function(b,i){
+  return {r:b,x:16+(i*31)%(W-70),y:[YARD+24,YARD+40,HORIZON+36][b.lane],
+    dir:i%2?1:-1,spd:.10+Math.random()*.15,hold:0};
+});
+function plant(x,by,h,gold,stub){
+  if(stub){px(x,by-1,1,2,'#8a6a3c');px(x+2,by-1,1,2,'#8a6a3c');return;}
+  var st=gold?'#c9a03a':'#3f8f3a',lf=gold?'#e8c14a':'#57ad46';
+  px(x+1,by-h,1,h,st);px(x,by-h+1,1,1,lf);px(x+2,by-h+2,1,1,lf);
+  px(x-1,by-h+3,1,1,lf);px(x+3,by-h+4,1,1,lf);
+  if(gold)px(x+2,by-h+1,1,2,'#f0d878');
+}
+function silo(x,y,w,hh){px(x,y,w,hh,'#cfd2c6');px(x,y,1,hh,'#eceee4');px(x+w-1,y,1,hh,'#9ba090');
+  px(x-1,y-3,w+2,3,'#b8bcae');px(x+1,y-5,w-2,2,'#b8bcae');
+  for(var i=6;i<hh;i+=7)px(x,y+i,w,1,'#b0b4a6');}
+function shed(x,y,w,hh,a,b){px(x,y,w,hh,a);px(x-2,y-4,w+4,4,b);px(x+3,y+hh-8,6,8,'#3a3f33');}
+function drawScene(){
+  px(0,0,W,26,'#7ec0e0');px(0,26,W,24,'#93cee6');px(0,50,W,HORIZON-50,'#b4dced');
+  px(48,14,12,12,'#f6e28c');px(46,16,16,8,'#f6e28c');px(50,12,8,16,'#f6e28c');px(50,16,8,8,'#fdf3c0');
+  clouds.forEach(function(c){var x=c.x|0,y=c.y|0,s=c.s;
+    px(x,y,10*s,4,'#f2f6f7');px(x+2*s,y-3,6*s,4,'#f2f6f7');px(x+s,y+3,8*s,2,'#dfe8ea');});
+  px(0,HORIZON-8,W,10,'#4f9440');
+  for(var tx=236;tx<W;tx+=9){var th=7+((tx*7)%7);
+    px(tx,HORIZON-8-th,7,th,'#2f6b2c');px(tx+1,HORIZON-8-th,2,th,'#3d8235');}
+  px(236,HORIZON-2,W-236,YARD-HORIZON+2,'#5aa246');
+  for(var r=0;r<6;r++){
+    var y=HORIZON+r*13,h=13;
+    px(0,y,236,h,r%2?'#7a5334':'#6d4a2e');px(0,y+h-1,236,1,'#5c3d25');
+    var ph=6+r*1.4,gold=r<3;
+    for(var x=(r*3)%6;x<236;x+=6)plant(x,y+h-1,ph,gold,(r===cutRow)&&x<combineX);
+  }
+  px(0,YARD,W,H-YARD,'#d9c79a');px(0,YARD,W,2,'#e6d6ad');px(0,YARD+26,W,1,'#cbb78a');px(0,H-16,W,16,'#c9b487');
+  shed(24,YARD+8,46,26,'#6f7466','#4d5246');
+  px(84,YARD+14,12,20,'#b9a76f');px(83,YARD+10,14,4,'#8f8153');
+  px(250,YARD-56,18,56,'#c3c6ba');px(250,YARD-56,1,56,'#e2e4da');
+  px(248,YARD-64,22,8,'#8d9184');px(252,YARD-68,5,4,'#6f7466');
+  silo(318,YARD-40,20,40);silo(346,YARD-30,14,30);
+  shed(376,YARD+6,30,22,'#8a5c46','#5f3f2f');
+  px(300,YARD+18,22,10,'#c4442e');px(304,YARD+14,8,4,'#8fb8cc');
+  px(302,YARD+28,4,2,'#2a2a26');px(316,YARD+28,4,2,'#2a2a26');
+  px(246,YARD-84,2,30,'#7a7f70');px(228,YARD-104,40,22,'#101208');
+  px(30,YARD-44,2,12,'#7c6a45');px(74,YARD-44,2,12,'#7c6a45');
+  var cy=HORIZON+cutRow*13+12,x2=combineX;
+  px(x2,cy-8,18,8,'#c4442e');px(x2+2,cy-12,7,4,'#8fb8cc');px(x2+18,cy-6,12,4,'#c4442e');
+  px(x2-8,cy-4,10,4,'#e0e3d8');px(x2-9,cy-1,12,2,'#9ba090');
+  px(x2+2,cy,4,3,'#2a2a26');px(x2+13,cy,4,3,'#2a2a26');px(x2+8,cy-16,2,5,'#8d9184');
+  bots.forEach(function(b){
+    var x=b.x|0,y=b.y|0,walk=(Math.floor(frame/9)+x)%2;
+    px(x-1,y-1,9,1,'#3a2a1c');px(x+1,y-3,5,2,'#5a3f28');px(x+1,y,5,4,'#d9a878');
+    px(x+2,y+1,1,1,'#241a12');px(x+4,y+1,1,1,'#241a12');
+    px(x+1,y+4,5,5,b.r.c);px(x,y+4,1,4,b.r.c);px(x+6,y+4,1,4,b.r.c);
+    if(walk){px(x+1,y+9,2,3,'#2f4a7a');px(x+4,y+9,2,3,'#2f4a7a');}
+    else{px(x+2,y+9,2,3,'#2f4a7a');px(x+3,y+9,2,3,'#3a5a8f');}
+  });
+}
+var layer=document.getElementById('layer');
+var tags=bots.map(function(b){var d=document.createElement('div');d.className='tag';
+  d.textContent=b.r.n;d.style.setProperty('--c',b.r.c);layer.appendChild(d);return d;});
+var barkEl=document.createElement('div');barkEl.className='bark';barkEl.style.display='none';layer.appendChild(barkEl);
+var sign=document.createElement('div');sign.className='signboard';
+sign.innerHTML='<div>CORN GROK</div><div class="r">CORN IS MONEY</div><div class="g">PUMP.FUN</div>';
+sign.style.left=(52/W*100)+'%';sign.style.top=((YARD-42)/H*100)+'%';layer.appendChild(sign);
+var led=document.createElement('div');led.className='ledsign';
+led.innerHTML='<div>CORN GROK</div><div class="b">PUMP.FUN</div>';
+led.style.left=(248/W*100)+'%';led.style.top=((YARD-82)/H*100)+'%';layer.appendChild(led);
+function placeTags(){bots.forEach(function(b,i){
+  tags[i].style.left=((b.x+3)/W*100)+'%';tags[i].style.top=((b.y-5)/H*100)+'%';});}
+
+/* ===================== OPS RAIL ===================== */
+var crewList=document.getElementById('crewList');
+var crewRows=CREW.map(function(b){
+  var r=document.createElement('div');r.className='crow';
+  r.innerHTML='<i class="bar" style="background:'+b.c+'"></i><span class="nm">'+b.n+
+    '</span><span class="st">'+b.acts[0]+'</span><span class="dl tab">+'+(Math.random()*90+5).toFixed(1)+'</span>';
+  crewList.appendChild(r);return{st:r.querySelector('.st'),dl:r.querySelector('.dl')};});
+var fieldBars=[];
+['01','02','03','04','05','06'].forEach(function(n,i){
+  var d=document.createElement('div');d.className='fr';
+  d.innerHTML='<span>'+n+'</span><div class="meter"><i style="width:'+(40+i*9)+'%"></i></div>';
+  document.getElementById('fieldGrid').appendChild(d);fieldBars.push(d.querySelector('i'));});
+var squawk=document.getElementById('squawk');
+function clock(){var d=new Date();return('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
+function squawkLine(){
+  var b=CREW[Math.floor(Math.random()*CREW.length)];
+  var k=[['ok','GROK','checked <em>'+b.n+'</em> · pass'],['ok','LOAD','truck is under the spout'],
+    ['warn','GROK','checked <em>'+b.n+'</em> · redo'],['ok',b.n,b.acts[Math.floor(Math.random()*b.acts.length)]],
+    ['ok','GROK','corn is money'],['bad','MECH','belt slipped on the auger'],
+    ['ok','GRADE','sample pulled · grade two']][Math.floor(Math.random()*7)];
+  var el=document.createElement('div');el.className=k[0];
+  el.innerHTML='<time>'+clock()+'</time><em>'+k[1]+'</em><span>'+k[2]+'</span>';
+  squawk.insertBefore(el,squawk.firstChild);
+  while(squawk.children.length>8)squawk.removeChild(squawk.lastChild);
+}
+for(var q=0;q<8;q++)squawkLine();
+
+/* ===================== CREW CARDS ===================== */
+var cg=document.getElementById('crewGrid');
+CREW.forEach(function(b,i){
+  var d=document.createElement('article');d.className='card';d.style.setProperty('--c',b.c);
+  var on=3+Math.floor(Math.random()*3),bars='';
+  for(var k=0;k<5;k++)bars+='<i class="'+(k<on?'on':'')+'"></i>';
+  d.innerHTML='<div class="cardglow"></div><div class="id">C-'+('0'+(i+1)).slice(-2)+'</div>'+
+    '<h4>'+b.n+'</h4><p>'+b.job+'</p><div class="st">'+bars+'</div>';
+  cg.appendChild(d);
+});
+
+/* ===================== MASCOT ===================== */
+(function(){
+  var m=document.getElementById('mascot');if(!m)return;var g=m.getContext('2d');
+  function p(x,y,w,h,c){g.fillStyle=c;g.fillRect(x,y,w,h);}
+  g.clearRect(0,0,72,96);
+  /* husk leaves */
+  p(10,26,8,54,'#3f8f3a');p(54,26,8,54,'#3f8f3a');p(6,36,6,32,'#57ad46');p(60,36,6,32,'#57ad46');
+  /* cob body */
+  p(20,14,32,70,'#e8c14a');p(20,14,4,70,'#f2d97e');p(48,14,4,70,'#c1902a');
+  p(24,8,24,8,'#e8c14a');p(24,82,24,6,'#c1902a');
+  /* kernel texture */
+  for(var y=18;y<80;y+=6)for(var x=24;x<48;x+=6)p(x+((y/6)%2?3:0),y,3,3,'#f0d878');
+  /* bot face plate */
+  p(24,34,24,20,'#171a12');p(26,36,20,16,'#0d1009');
+  p(29,41,6,4,'#5ef07a');p(39,41,6,4,'#5ef07a');
+  p(31,49,12,2,'#e8b93c');
+  /* antenna */
+  p(35,2,2,7,'#8d9184');p(32,0,8,3,'#d4553f');
+})();
+
+/* ===================== CHARTS ===================== */
+var pc=document.getElementById('pricechart'),pctx=pc.getContext('2d');
+var candles=[],price=3.10;
+for(var i=0;i<64;i++){var o=price;price=Math.max(1.4,price*(1+(Math.random()-.42)*.05));
+  candles.push({o:o,c:price,h:Math.max(o,price)*(1+Math.random()*.02),l:Math.min(o,price)*(1-Math.random()*.02),v:Math.random()});}
+function drawPrice(){
+  var w=pc.width,h=pc.height,padB=44,padR=46;
+  pctx.fillStyle='#0a0806';pctx.fillRect(0,0,w,h);
+  var lo=Infinity,hi=-Infinity;candles.forEach(function(k){lo=Math.min(lo,k.l);hi=Math.max(hi,k.h);});
+  var pd=(hi-lo)*.12;lo-=pd;hi+=pd;
+  var Y=function(p){return(h-padB)-(p-lo)/(hi-lo)*(h-padB-8);};
+  pctx.strokeStyle='#1d1810';
+  for(var g2=0;g2<5;g2++){var yy=Math.round(8+g2*((h-padB-8)/4))+.5;
+    pctx.beginPath();pctx.moveTo(0,yy);pctx.lineTo(w-padR,yy);pctx.stroke();}
+  var cw=(w-padR)/candles.length;
+  candles.forEach(function(k,i){var vh=k.v*32;
+    pctx.fillStyle=k.c>=k.o?'rgba(94,240,122,.3)':'rgba(212,85,63,.3)';
+    pctx.fillRect(i*cw,h-6-vh,Math.max(1,cw-1.4),vh);});
+  candles.forEach(function(k,i){
+    var up=k.c>=k.o,x=i*cw+cw/2;
+    pctx.strokeStyle=pctx.fillStyle=up?'#5ef07a':'#d4553f';
+    pctx.beginPath();pctx.moveTo(Math.round(x)+.5,Y(k.h));pctx.lineTo(Math.round(x)+.5,Y(k.l));pctx.stroke();
+    var yo=Y(k.o),yc=Y(k.c);
+    pctx.fillRect(i*cw+.8,Math.min(yo,yc),Math.max(1.4,cw-2.2),Math.max(1.2,Math.abs(yc-yo)));});
+  var last=candles[candles.length-1],ly=Y(last.c);
+  pctx.setLineDash([3,3]);pctx.strokeStyle='#5ef07a';
+  pctx.beginPath();pctx.moveTo(0,Math.round(ly)+.5);pctx.lineTo(w-padR,Math.round(ly)+.5);pctx.stroke();
+  pctx.setLineDash([]);
+  pctx.fillStyle='#5ef07a';pctx.fillRect(w-padR+2,ly-9,42,18);
+  pctx.fillStyle='#04150a';pctx.font='13px VT323, monospace';pctx.textBaseline='middle';
+  pctx.fillText(last.c.toFixed(2),w-padR+8,ly+1);
+}
+var tc=document.getElementById('treasury'),tctx=tc.getContext('2d'),steps=[],acc=0;
+for(var s2=0;s2<34;s2++){acc+=Math.random()<.35?Math.random()*1.6:.08;steps.push(acc);}
+function drawTreasury(){
+  var w=tc.width,h=tc.height;tctx.fillStyle='#080604';tctx.fillRect(0,0,w,h);
+  var mx=steps[steps.length-1]*1.08,sw=w/steps.length;
+  var gr=tctx.createLinearGradient(0,0,0,h);
+  gr.addColorStop(0,'rgba(232,185,60,.55)');gr.addColorStop(1,'rgba(232,185,60,.04)');
+  tctx.beginPath();tctx.moveTo(0,h);
+  steps.forEach(function(v,i){var y=h-(v/mx)*(h-8);tctx.lineTo(i*sw,y);tctx.lineTo((i+1)*sw,y);});
+  tctx.lineTo(w,h);tctx.closePath();tctx.fillStyle=gr;tctx.fill();
+  tctx.beginPath();tctx.moveTo(0,h-(steps[0]/mx)*(h-8));
+  steps.forEach(function(v,i){var y=h-(v/mx)*(h-8);tctx.lineTo(i*sw,y);tctx.lineTo((i+1)*sw,y);});
+  tctx.strokeStyle='#e8b93c';tctx.lineWidth=1.4;tctx.stroke();
+}
+var BUYERS=['RAIL 88','BARGE 04','CARGO NORTH','EXPORT DESK','GULF PORT','ADM RIVER','FEED YARD 9','ETHANOL 12'];
+function renderTape(){var t=document.getElementById('tape'),html='';
+  for(var i=0;i<5;i++){var b=BUYERS[Math.floor(Math.random()*BUYERS.length)];
+    html+='<tr><td class="k">SOLD</td><td>'+b+'</td><td class="n">'+(300+Math.floor(Math.random()*700))+
+      ' BU</td><td class="p">'+(4.6+Math.random()*1.9).toFixed(2)+'</td></tr>';}
+  t.innerHTML=html;}
+renderTape();
+
+/* ===================== LIVE STATE ===================== */
+var S={silo:4,holders:8043,onHand:521,moisture:19.6,sol:13.49,sold:3565,wind:6,temp:14,rain:1.4,cap:185};
+function fmt(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ');}
+function T(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function tick(){
+  var last=candles[candles.length-1];
+  S.silo=Math.min(99,S.silo+(Math.random()<.5?1:0));
+  S.holders+=Math.floor(Math.random()*11);
+  S.onHand=Math.max(120,S.onHand+Math.floor((Math.random()-.35)*90));
+  S.moisture=Math.max(13.5,Math.min(22,S.moisture+(Math.random()-.55)*.4));
+  S.sol+=Math.random()*.42;S.sold+=Math.floor(Math.random()*120);
+  S.wind=Math.max(2,Math.min(22,S.wind+Math.round((Math.random()-.5)*4)));
+  S.temp=Math.max(8,Math.min(29,S.temp+Math.round((Math.random()-.5)*2)));
+  S.cap=Math.max(40,S.cap+Math.round((Math.random()-.42)*14));
+  T('siloPct',S.silo+'%');T('onHand',S.onHand+' BU');T('bkHand',S.onHand+' BU');
+  T('moist',S.moisture.toFixed(1)+'%');T('wind',S.wind+' KT');T('temp',S.temp+'°');
+  T('rain',S.rain.toFixed(2)+'"');T('ledNum',S.sol.toFixed(3));
+  T('trSold',fmt(S.sold));T('trCash','$'+fmt(Math.round(S.sold*5.13)));
+  T('bkHold',fmt(S.holders));
+  fieldBars.forEach(function(b){b.style.width=Math.min(100,(parseFloat(b.style.width)||40)+Math.random()*2).toFixed(0)+'%';});
+  var o=last.c,c2=Math.max(1.2,o*(1+(Math.random()-.44)*.055));
+  candles.push({o:o,c:c2,h:Math.max(o,c2)*(1+Math.random()*.018),l:Math.min(o,c2)*(1-Math.random()*.018),v:Math.random()});
+  if(candles.length>64)candles.shift();
+  steps.push(steps[steps.length-1]+(Math.random()<.4?Math.random()*1.4:.06));
+  if(steps.length>34)steps.shift();
+  drawPrice();drawTreasury();
+  var chg=(c2-candles[0].c)/candles[0].c*100;
+  T('pxNow',c2.toFixed(2));
+  var ce=document.getElementById('pxChg');ce.textContent=(chg>=0?'+':'')+chg.toFixed(1)+'%';
+  ce.style.color=chg>=0?'var(--green)':'var(--red)';
+  T('bkSpot',c2.toFixed(2));T('bkBid',(c2-.19).toFixed(2));T('bkFut',(c2+.21).toFixed(2));
+  T('bkVal','$'+(c2*S.onHand/1000).toFixed(1)+'K');
+  T('bkVol',(200+Math.random()*260).toFixed(1)+'K');T('bkOi',(.8+Math.random()*.7).toFixed(2)+'M');
+  renderTape();squawkLine();
+  var k=Math.floor(Math.random()*CREW.length);
+  crewRows[k].st.textContent=CREW[k].acts[Math.floor(Math.random()*CREW[k].acts.length)];
+  crewRows[k].dl.textContent='+'+(Math.random()*90+5).toFixed(1);
+  T('bossDoing','checking '+CREW[Math.floor(Math.random()*CREW.length)].n.toLowerCase());
+}
+drawPrice();drawTreasury();tick();
+setInterval(tick,reduce?9000:2400);
+
+/* ===================== FARM LOOP (paused off-screen) ===================== */
+var visible=true;
+if('IntersectionObserver' in window){
+  new IntersectionObserver(function(es){visible=es[0].isIntersecting;},{threshold:0})
+    .observe(document.querySelector('.screenwrap'));
+}
+function loop(){
+  frame++;
+  if(visible){
+    clouds.forEach(function(c){c.x+=.06+c.s*.012;if(c.x>W+40)c.x=-50;});
+    combineX+=.42;if(combineX>W+30){combineX=-40;cutRow=(cutRow+1)%3;}
+    bots.forEach(function(b){
+      if(b.hold>0){b.hold--;}
+      else{b.x+=b.dir*b.spd;
+        if(b.x<8){b.x=8;b.dir=1;b.hold=60+Math.random()*160;}
+        if(b.x>W-16){b.x=W-16;b.dir=-1;b.hold=60+Math.random()*160;}
+        if(Math.random()<.0025){b.dir*=-1;b.hold=40+Math.random()*120;}}});
+    drawScene();placeTags();
+  }
+  requestAnimationFrame(loop);
+}
+drawScene();placeTags();
+if(!reduce){loop();setInterval(function(){
+  if(!visible)return;
+  var b=bots[Math.floor(Math.random()*bots.length)];
+  barkEl.textContent=BARKS[Math.floor(Math.random()*BARKS.length)];
+  barkEl.style.display='block';
+  barkEl.style.left=Math.max(10,Math.min(72,(b.x/W*100)))+'%';
+  barkEl.style.top=((b.y-16)/H*100)+'%';
+  setTimeout(function(){barkEl.style.display='none';},2600);
+},2600);}
+
+/* ===================== GOAL COUNTERS ===================== */
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.statrow .v[data-to]'));
+  function paint(el,val){
+    var pre=el.getAttribute('data-pre')||'',post=el.getAttribute('data-post')||'';
+    var n=Math.round(val);
+    el.textContent=pre+(el.getAttribute('data-group')?fmt(n):n)+post;
+  }
+  function run(el){
+    var to=parseFloat(el.getAttribute('data-to')),t0=null,dur=1500;
+    function step(t){
+      if(!t0)t0=t;
+      var k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3);
+      paint(el,to*e);
+      if(k<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if(reduce||!('IntersectionObserver' in window)){els.forEach(function(el){paint(el,parseFloat(el.getAttribute('data-to')));});return;}
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){run(e.target);io.unobserve(e.target);}});
+  },{threshold:.4});
+  els.forEach(function(el){io.observe(el);});
+})();
+
+/* ===================== FARM RADIO — original 8-bit shop loop =====================
+   Generated live with Web Audio: square-wave lead over a boom-chick bass and a
+   noise hat. No audio file, no samples, nothing borrowed. */
+var Radio=(function(){
+  var AC=window.AudioContext||window.webkitAudioContext;
+  var ac=null,master=null,noise=null,timer=null,step=0,next=0,on=false;
+  var BPM=112, SPB=60/BPM, LOOP=16;               /* 4 bars of 4/4 */
+  /* lead: [midi, beat, beats] — G major, country shuffle */
+  var LEAD=[[67,0,.7],[71,1,.45],[74,1.5,.45],[71,2,.9],[67,3,.7],
+            [72,4,.7],[76,5,.45],[72,5.5,.45],[69,6,.9],[72,7,.7],
+            [74,8,.7],[78,9,.45],[74,9.5,.45],[71,10,.9],[74,11,.7],
+            [67,12,.9],[71,13,.45],[74,13.5,.45],[79,14,1.7]];
+  var BASS=[[43,50],[48,55],[50,57],[43,50]];      /* G · C · D · G : root, fifth */
+  function hz(m){return 440*Math.pow(2,(m-69)/12);}
+  function build(){
+    ac=new AC();
+    master=ac.createGain();master.gain.value=0;master.connect(ac.destination);
+    var len=Math.floor(ac.sampleRate*.2),buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0);
+    for(var i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);
+    noise=buf;
+  }
+  function tone(type,f,t,dur,vol){
+    var o=ac.createOscillator(),g=ac.createGain();
+    o.type=type;o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol,t+.012);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.02);
+  }
+  function hat(t,vol){
+    var s=ac.createBufferSource(),g=ac.createGain();
+    s.buffer=noise;g.gain.value=vol;s.connect(g);g.connect(master);s.start(t);
+  }
+  function schedule(){
+    while(next<ac.currentTime+.18){
+      var beat=step%LOOP, bar=Math.floor(beat/4), inbar=beat%4;
+      /* boom-chick bass: root on 1 and 3, fifth on 2 and 4 */
+      var pair=BASS[bar], root=(inbar===0||inbar===2)?pair[0]:pair[1];
+      tone('triangle',hz(root),next,.34,.16);
+      hat(next+SPB*.5,.05);
+      if(inbar===1||inbar===3)hat(next,.035);
+      LEAD.forEach(function(n){
+        if(n[1]===beat)tone('square',hz(n[0]),next,n[2]*SPB,.055);
+        else if(n[1]===beat+.5)tone('square',hz(n[0]),next+SPB*.5,n[2]*SPB,.055);
+      });
+      next+=SPB;step++;
+    }
+    timer=setTimeout(schedule,25);
+  }
+  var btn=document.getElementById('radio'),lab=document.getElementById('radioLabel');
+  function paint(){
+    btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on?'true':'false');
+    lab.textContent='FARM RADIO · '+(on?'ON':'OFF');
+  }
+  function toggle(){
+    if(!ac)build();
+    if(ac.state==='suspended')ac.resume();
+    on=!on;
+    if(on){next=ac.currentTime+.06;step=0;schedule();
+      master.gain.cancelScheduledValues(ac.currentTime);
+      master.gain.setValueAtTime(0,ac.currentTime);
+      master.gain.linearRampToValueAtTime(.5,ac.currentTime+.5);}
+    else{master.gain.cancelScheduledValues(ac.currentTime);
+      master.gain.setValueAtTime(master.gain.value,ac.currentTime);
+      master.gain.linearRampToValueAtTime(0,ac.currentTime+.35);
+      clearTimeout(timer);}
+    paint();return on;
+  }
+  btn.addEventListener('click',toggle);
+  return {toggle:toggle,isOn:function(){return on;}};
+})();
+
+/* ===================== TERMINAL ===================== */
+var out=document.getElementById('termOut'),inp=document.getElementById('termIn');
+function say(txt,cls){var d=document.createElement('div');if(cls)d.className=cls;d.innerHTML=txt;
+  out.appendChild(d);out.scrollTop=out.scrollHeight;}
+say('<span class="d">GrokFarm shell · season 3 · day 41 · 240 acres</span>');
+say('<span class="d">twelve bots on shift. type</span> <span class="c">help</span> <span class="d">to start.</span>');
+var CMDS={
+  help:function(){return 'commands: <span class="c">ca</span> · <span class="c">price</span> · <span class="c">crew</span> · <span class="c">silo</span> · <span class="c">field</span> · <span class="c">radio</span> · <span class="c">corn</span> · <span class="c">whoami</span> · <span class="c">clear</span>';},
+  radio:function(){return 'farm radio '+(Radio.toggle()?'<span class="g">on</span> — 8-bit shop loop, written by the farm':'<span class="d">off</span>');},
+  ca:function(){return 'contract address: <span class="c">not minted yet</span> — it gets posted here and on X the minute the curve opens. anything you see before that is a weed. pull it.';},
+  price:function(){return '$GROKFARM <span class="g">'+candles[candles.length-1].c.toFixed(2)+'/BU</span> · holders '+fmt(S.holders)+' · <span class="d">simulated, pre-launch</span>';},
+  crew:function(){return CREW.map(function(c){return '<span class="c">'+c.n+'</span> — '+c.acts[0];}).join('\n');},
+  silo:function(){return 'silo '+S.silo+'% full · on hand '+S.onHand+' BU · moisture '+S.moisture.toFixed(1)+'% · test wt 60.0';},
+  field:function(){return '6 rows · combine is on row '+('0'+(cutRow+1)).slice(-2)+' · wind '+S.wind+' kt · temp '+S.temp+'°';},
+  corn:function(){return '<span class="g">CORN IS MONEY.</span>';},
+  whoami:function(){return 'you are the one human. you sign the elevator contract. the bots do the rest.';},
+  clear:function(){out.innerHTML='';return '';}
+};
+if(inp){
+  inp.addEventListener('keydown',function(e){
+    if(e.key!=='Enter')return;
+    var v=inp.value.trim().toLowerCase();inp.value='';
+    if(!v)return;
+    say('<span class="c">grok@farm:~$</span> '+v.replace(/[<>]/g,''));
+    var f=CMDS[v];
+    say(f?f():'<span class="d">no such command. try</span> <span class="c">help</span>');
+  });
+}
+
+/* ===================== SCROLL: reveal, progress, counter ===================== */
+var revs=[].slice.call(document.querySelectorAll('.rv'));
+if('IntersectionObserver' in window && !reduce){
+  var ro=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});
+  },{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  revs.forEach(function(el){ro.observe(el);});
+}else{revs.forEach(function(el){el.classList.add('in');});}
+
+var secs=[].slice.call(document.querySelectorAll('.sec[data-name]'));
+var prog=document.getElementById('prog'),counter=document.getElementById('counter');
+var cn=counter.querySelector('.n'),cl=counter.querySelector('.l'),cb=counter.querySelectorAll('.bars i');
+var ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(function(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    prog.style.width=(h>0?(window.scrollY/h*100):0).toFixed(2)+'%';
+    var idx=0,mid=window.scrollY+window.innerHeight*.45;
+    secs.forEach(function(s,i){if(s.offsetTop<=mid)idx=i;});
+    cn.textContent=('0'+(idx+1)).slice(-2)+' / 0'+secs.length;
+    cl.textContent=secs[idx].getAttribute('data-name');
+    for(var i=0;i<cb.length;i++)cb[i].className=i<=idx?'on':'';
+    ticking=false;
+  });
+}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* ===================== CA COPY ===================== */
+var cbn=document.getElementById('copyBtn');
+cbn.addEventListener('click',function(){
+  var o=cbn.textContent;cbn.textContent='NOT MINTED YET';
+  setTimeout(function(){cbn.textContent=o;},1700);
+});
+})();
+</script>
+
+</body>
+</html>
